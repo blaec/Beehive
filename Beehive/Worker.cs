@@ -5,8 +5,10 @@ using System.Text;
 
 namespace Beehive
 {
-    class Worker
+    class Worker : Bee
     {
+        private const double HONEY_UNITS_PER_SHIFT_WORKED = .65;
+
         private string currentJob = "";
         public string CurrentJob
         {
@@ -28,7 +30,8 @@ namespace Beehive
         private int shiftsToWork;
         private int shiftsWorked;
 
-        public Worker(string[] jobsICanDo)
+        public Worker(string[] jobsICanDo, double weightMg)
+            : base(weightMg)
         {
             this.jobsICanDo = jobsICanDo;
         }
@@ -61,6 +64,11 @@ namespace Beehive
                 }
             }
             return result;
+        }
+
+        public override double HoneyConsumptionRate()
+        {
+            return base.HoneyConsumptionRate() + shiftsWorked * HONEY_UNITS_PER_SHIFT_WORKED;
         }
     }
 }

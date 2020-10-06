@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Beehive
 {
-    class Queen
+    class Queen : Bee
     {
         private Worker[] workers;
 
@@ -12,8 +12,10 @@ namespace Beehive
 
         private const string NEW_LINE = "\r\n";
 
-        public Queen(Worker[] workers)
+        public Queen(Worker[] workers, double weightMg) 
+            : base(weightMg)
         {
+            
             this.workers = workers;
         }
 
@@ -35,6 +37,7 @@ namespace Beehive
         {
             shiftNumber++;
             string report = $"Report for shift #{shiftNumber}{NEW_LINE}";
+            double honeyConsumed = base.HoneyConsumptionRate();
             for (int i = 0; i < workers.Length; i++)
             {
                 string worker = $"Worker #{i + 1}";
@@ -43,6 +46,7 @@ namespace Beehive
                     report += $"{worker} finished the job{NEW_LINE}";
                 }
 
+                honeyConsumed += workers[i].HoneyConsumptionRate();
                 string currentJob = workers[i].CurrentJob;
                 report += String.IsNullOrEmpty(currentJob)
                     ? $"{worker} is not working{NEW_LINE}"
@@ -50,6 +54,7 @@ namespace Beehive
                         ? $"{worker} is doing `{currentJob}` for {workers[i].ShiftsLeft} more shifts{NEW_LINE}"
                         : $"{worker} will be done with `{currentJob}` after this shift{NEW_LINE}";
             }
+            report += $"Total honey consumed for the shift: {honeyConsumed} units";
             return report;
         }
     }
